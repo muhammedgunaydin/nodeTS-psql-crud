@@ -2,30 +2,29 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import helmet from 'helmet'
-import dotenv from 'dotenv';
-import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv'
+import { PrismaClient } from '@prisma/client'
+import bookRouter from './routers/bookRouter'
 dotenv.config()
 
 const app = express()
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(helmet())
 app.use(cors())
 
-prisma.$connect()
+prisma
+  .$connect()
   .then(() => {
-    console.log('Db succesfully connected');
+    console.log('Db succesfully connected')
   })
   .catch((error) => {
-    console.error('Db connection issue:', error);
-  });
+    console.error('Db connection issue:', error)
+  })
 
-
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
+app.use('/api/book', bookRouter)
 
 const port = 3000
 app.listen(port, () => {
