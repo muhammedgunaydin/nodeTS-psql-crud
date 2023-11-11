@@ -5,6 +5,8 @@ import helmet from 'helmet'
 import dotenv from 'dotenv'
 import { PrismaClient } from '@prisma/client'
 import bookRouter from './routers/bookRouter'
+import swaggerUi from "swagger-ui-express";
+import specs from './docs/swagger'
 dotenv.config()
 
 const app = express()
@@ -25,6 +27,7 @@ prisma
   })
 
 app.use('/api/book', bookRouter)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 const port = 3000
 app.listen(port, () => {
